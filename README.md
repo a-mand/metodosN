@@ -1,3 +1,5 @@
-## Método do Ponto Fixo
+## MAtividade 1 - Métodos Numéricos
 
-O Método do Ponto Fixo é um algoritmo numérico para encontrar raízes de equações da forma f(x)=0f(x)=0. A ideia central é reformular a equação como x=g(x)x=g(x), onde g(x)g(x) é uma função de iteração, e então usar um processo iterativo para convergir para a solução (o "ponto fixo").
+Repositório dedicado a discilpina de métodos numéricos.
+
+Atividade 1 - Implemntação dos Métodos Intervalares e Abertos em código python e resolução das atividades 5.1, 5.2, 5.3, 5.4, 5.5 e 5.13 do livro (página 114) e 6.2, 6.5, 6.10, 6.24, das páginas 136 e 137 do livro Métodos Numéricos para a Engenharia de Steven C. Chapra e Raymond P. Canale.
