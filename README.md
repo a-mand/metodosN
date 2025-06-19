@@ -1,4 +1,4 @@
-## MAtividade 1 - Métodos Numéricos
+## Atividade 1 - Métodos Numéricos
 
 Repositório dedicado a discilpina de métodos numéricos.
 
