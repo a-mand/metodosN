@@ -101,6 +101,7 @@ Este projeto foi testado e validado resolvendo problemas específicos do livro-t
 * * `Metodos_numericos_para_engenharia`: Livro da disciplina.
 * `Relatório/`: Pasta contendo o relatório acadêmico e suas figuras geradas.
     * `Relatório/Figuras/`: Contém as imagens dos gráficos e saídas do console para as questões resolvidas.
+* `testes.py`: Testes unitários para verificar a funcionalidade dos métodos implementados.
 * `README.md`: Este arquivo.
 
 ## Contribuição

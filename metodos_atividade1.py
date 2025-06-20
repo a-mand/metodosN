@@ -368,6 +368,38 @@ def print_results(result):
         for row in result['histórico']:
             print("\t".join(f"{row[h]:.6f}" if isinstance(row[h], float) else str(row[h]) for h in headers))
 
+
+
+def get_numeric_input(prompt, num_type=float, default=None):
+    """
+    Solicita uma entrada numérica ao usuário, validando o tipo e permitindo um valor padrão.
+    Args:
+        prompt (str): A mensagem a ser exibida para o usuário.
+        num_type (type): O tipo numérico esperado (float ou int).
+        default: O valor padrão a ser usado se o usuário pressionar Enter.
+
+    Returns:
+        O número convertido para o tipo especificado.
+    """
+    # Adiciona a informação do valor padrão ao prompt, se houver
+    if default is not None:
+        prompt_full = f"{prompt} [padrão: {default}]: "
+    else:
+        prompt_full = f"{prompt}: "
+
+    while True:
+        user_input = input(prompt_full).strip()
+
+        # Se um valor padrão é permitido e o usuário não digitou nada
+        if default is not None and user_input == "":
+            return default
+
+        # Tenta converter a entrada para o tipo numérico desejado
+        try:
+            return num_type(user_input)
+        except ValueError:
+            print(f"Entrada inválida. Por favor, insira um número válido do tipo '{num_type.__name__}'.")
+
 def main_menu():
     while True:
         print("\n=== MÉTODOS NUMÉRICOS PARA ENCONTRAR RAÍZES ===")
@@ -383,9 +415,9 @@ def main_menu():
         elif choice == '2':
             open_methods_menu()
         elif choice == '3':
-            a = float(input("Coeficiente a: "))
-            b = float(input("Coeficiente b: "))
-            c = float(input("Coeficiente c: "))
+            a = get_numeric_input("Coeficiente a: ")
+            b = get_numeric_input("Coeficiente b: ")
+            c = get_numeric_input("Coeficiente c: ")
             roots = quadratic_formula(a, b, c)
             if roots:
                 print(f"\nRaízes encontradas: {roots[0]:.8f} e {roots[1]:.8f}")
@@ -409,17 +441,17 @@ def interval_methods_menu():
         
         if choice == '1':
             f_expr = input("Digite a expressão da função (use 'x' como variável): ")
-            a = float(input("Limite inferior do intervalo: "))
-            b = float(input("Limite superior do intervalo: "))
-            N = int(input("Número de subdivisões: "))
+            a = get_numeric_input("Limite inferior do intervalo: ")
+            b = get_numeric_input("Limite superior do intervalo: ")
+            N = get_numeric_input("Número de subdivisões", num_type=int)
             intervals = incremental_search(f_expr, a, b, N)
             print("\nIntervalos com mudança de sinal:", intervals)
         elif choice in ['2', '3', '4']:
             f_expr = input("Digite a expressão da função (use 'x' como variável): ")
-            a = float(input("Limite inferior do intervalo: "))
-            b = float(input("Limite superior do intervalo: "))
-            tol = float(input("Tolerância desejada (ex: 1e-6): "))
-            
+            a = get_numeric_input("Limite inferior do intervalo: ")
+            b = get_numeric_input("Limite superior do intervalo: ")
+            tol = get_numeric_input("Tolerância desejada", default=1e-6)
+
             if choice == '2':
                 result = bisection_method(f_expr, a, b, tol)
             elif choice == '3':
@@ -446,28 +478,28 @@ def open_methods_menu():
         
         if choice == '1':
             g_expr = input("Digite a expressão da função de iteração g(x): ")
-            x0 = float(input("Chute inicial: "))
-            tol = float(input("Tolerância desejada (ex: 1e-6): "))
+            x0 = get_numeric_input("Chute inicial: ")
+            tol = get_numeric_input("Tolerância desejada", default=1e-6)
             result = fixed_point_iteration(g_expr, x0, tol)
             print_results(result)
         elif choice == '2':
             f_expr = input("Digite a expressão da função f(x): ")
-            x0 = float(input("Chute inicial: "))
-            tol = float(input("Tolerância desejada (ex: 1e-6): "))
+            x0 = get_numeric_input("Chute inicial: ")
+            tol = get_numeric_input("Tolerância desejada", default=1e-6)
             result = newton_raphson(f_expr, x0, tol)
             print_results(result)
         elif choice == '3':
             f_expr = input("Digite a expressão da função f(x): ")
-            x0 = float(input("Primeiro ponto inicial: "))
-            x1 = float(input("Segundo ponto inicial: "))
-            tol = float(input("Tolerância desejada (ex: 1e-6): "))
+            x0 = get_numeric_input("Primeiro ponto inicial: ")
+            x1 = get_numeric_input("Segundo ponto inicial: ")
+            tol = get_numeric_input("Tolerância desejada", default=1e-6)
             result = secant_method(f_expr, x0, x1, tol)
             print_results(result)
         elif choice == '4':  # NOVA OPÇÃO
             f_expr = input("Digite a expressão da função f(x): ")
-            x0 = float(input("Ponto inicial (x0): "))
-            delta = float(input("Perturbação (δ, default=0.01): ") or "0.01")
-            tol = float(input("Tolerância desejada (ex: 1e-6): "))
+            x0 = get_numeric_input("Ponto inicial (x0)")
+            delta = get_numeric_input("Perturbação (δ)", default=0.01)
+            tol = get_numeric_input("Tolerância desejada", default=1e-6)
             result = modified_secant(f_expr, x0, delta, tol)
             print_results(result)
         elif choice == '5':
