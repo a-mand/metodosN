@@ -297,6 +297,61 @@ def quadratic_formula(a, b, c):
     x2 = (-b - sqrt(discriminant)) / (2*a)
     return x1, x2
 
+def modified_secant(f_expr, x0, delta=0.01, tol=1e-6, max_iter=100):
+    x = symbols('x')
+    try:
+        f = lambdify(x, sympify(f_expr), 'numpy')
+    except:
+        return {'error': 'Expressão inválida.'}
+    
+    history = []
+    for i in range(max_iter):
+        # Perturbação relativa adaptativa
+        delta_x = delta * max(abs(x0), 1)  # Evita perturbações muito pequenas
+        fx0 = f(x0)
+        fx1 = f(x0 + delta_x)
+        
+        # Fator de segurança para divisão
+        if abs(fx1 - fx0) < 1e-12:
+            delta_x = delta_x * 2  # Aumenta a perturbação se a diferença for muito pequena
+            fx1 = f(x0 + delta_x)
+            
+        x1 = x0 - (delta_x * fx0) / (fx1 - fx0)
+        
+        # Previne saltos absurdamente grandes
+        if abs(x1 - x0) > 1.0:  # Se o salto for maior que 1.0
+            x1 = x0 + 0.5 * np.sign(x1 - x0)  # Limita o tamanho do passo
+            
+        εa = abs((x1 - x0) / x1) * 100 if i > 0 else float('nan')
+        history.append({
+            'iteração': i+1,
+            'x': x1,
+            'f(x)': f(x1),
+            'εa (%)': εa
+        })
+        
+        if abs(x1 - x0) < tol:
+            return {
+                'raiz': x1,
+                'iterações': i+1,
+                'histórico': history,
+                'status': 'Convergido'
+            }
+        x0 = x1
+    
+    return {
+        'raiz': x1,
+        'iterações': max_iter,
+        'histórico': history,
+        'status': 'Máximo de iterações atingido'
+    }
+
+def paraquedista(m):
+    g = 9.8
+    c = 15
+    t = 9
+    return g*m/c * (1 - math.exp(-c/m*t)) - 35
+
 def print_results(result):
     if 'error' in result:
         print("Erro:", result['error'])
@@ -384,7 +439,8 @@ def open_methods_menu():
         print("1. Método do Ponto Fixo")
         print("2. Método de Newton-Raphson")
         print("3. Método da Secante")
-        print("4. Voltar")
+        print("4. Método da Secante Modificado")
+        print("5. Voltar")
         
         choice = input("Escolha uma opção: ")
         
@@ -407,7 +463,14 @@ def open_methods_menu():
             tol = float(input("Tolerância desejada (ex: 1e-6): "))
             result = secant_method(f_expr, x0, x1, tol)
             print_results(result)
-        elif choice == '4':
+        elif choice == '4':  # NOVA OPÇÃO
+            f_expr = input("Digite a expressão da função f(x): ")
+            x0 = float(input("Ponto inicial (x0): "))
+            delta = float(input("Perturbação (δ, default=0.01): ") or "0.01")
+            tol = float(input("Tolerância desejada (ex: 1e-6): "))
+            result = modified_secant(f_expr, x0, delta, tol)
+            print_results(result)
+        elif choice == '5':
             break
         else:
             print("Opção inválida. Tente novamente.")
