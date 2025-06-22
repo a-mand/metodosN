@@ -40,6 +40,18 @@ O objetivo principal é fornecer uma ferramenta interativa para explorar e aplic
     ```
     O programa apresentará um menu interativo para escolher o método e inserir os parâmetros.
 
+## Testes Automatizados
+
+Para garantir a corretude e a confiabilidade dos algoritmos, o projeto inclui uma suíte de testes automatizados. Utilizando o framework `unittest` do Python, os testes validam a lógica de cada método numérico de forma isolada, verificando casos de sucesso conhecidos e o tratamento de erros esperados.
+
+### Executando os Testes
+
+Para rodar a suíte de testes e verificar a integridade do código, execute o seguinte comando no terminal, a partir da pasta raiz do projeto:
+
+```bash
+python -m unittest -v testes.py
+```
+
 ## Questões Resolvidas do Livro "Métodos Numéricos para Engenharia" (Steven C. Chapra e Raymond P. Canale)
 
 Este projeto foi testado e validado resolvendo problemas específicos do livro-texto, demonstrando a aplicação prática de cada método.
@@ -101,6 +113,7 @@ Este projeto foi testado e validado resolvendo problemas específicos do livro-t
 * * `Metodos_numericos_para_engenharia`: Livro da disciplina.
 * `Relatório/`: Pasta contendo o relatório acadêmico e suas figuras geradas.
     * `Relatório/Figuras/`: Contém as imagens dos gráficos e saídas do console para as questões resolvidas.
+* `testes.py`: Testes unitários para verificar a funcionalidade dos métodos implementados.
 * `README.md`: Este arquivo.
 
 ## Contribuição
