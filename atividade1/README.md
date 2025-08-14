@@ -81,7 +81,11 @@ Este projeto foi testado e validado resolvendo problemas específicos do livro-t
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests.
 ## Autor
 AMANDA GABRIELLY PRESTES LOPES - 202207040043
+
 BIANCA CRISTINA DOS SANTOS BRITO - 202006840016
+
 GILTON CONCEICAO CAMINHA - 202106840008
+
 JOAO LORRAN GUIMARAES MENEZES - 201706840040
+
 YASMIM CARVALHO DA SILVA - 202007040025
