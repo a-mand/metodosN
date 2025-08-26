@@ -58,11 +58,24 @@ def escalonar(matriz, m, n):
         linha_pivo += 1
     
     # 2.4) Remover linhas nulas
-    matriz_limpa = [linha for linha in matriz_temp if any(abs(x) > 1e-9 for x in linha)]
-    
+    matriz_limpa = []
+    inconsistente = False
+    for linha in matriz_temp:
+        # Verifica se a linha é inconsistente (0...0 | b), com b != 0
+        if all(abs(x) < 1e-9 for x in linha[:-1]) and abs(linha[-1]) > 1e-9:
+            inconsistente = True
+            break
+        # Adiciona a linha se não for toda zero
+        if any(abs(x) > 1e-9 for x in linha):
+            matriz_limpa.append(linha)
+
+    if inconsistente:
+        print("Sistema inconsistente detectado!")
+        return None
+
     print("Matriz escalonada final:")
     imprimir_matriz(matriz_limpa)
-    
+
     return matriz_limpa
 
 def canonizar(matriz_escalonada, m, n):
