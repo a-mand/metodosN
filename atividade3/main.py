@@ -1,4 +1,5 @@
 import numpy as np
+from metodos_edo import rk_fehlberg
 import matplotlib.pyplot as plt
 from metodos_edo import (
     euler, heun_nao_iterativo, heun_iterativo, ponto_medio,
@@ -118,25 +119,27 @@ def problema_3_3():
 
 ## 3.5) Plotar um gráfico com os resultados
 def problema_3_5():
+    # EDO do problema 3.1, 3.2, 3.3 e da Figura 25.11
     def f(x, y):
-        return y - x
+        return -2*x**3 + 12*x**2 - 20*x + 8.5
+    
+    # Solução exata para essa EDO
     def y_exata(x):
-        return np.exp(x) + x + 1
+        return -0.5*x**4 + 4*x**3 - 10*x**2 + 8.5*x + 1
 
-    x0, y0 = 0, 2.0
-    x_final = 2.0
+    x0, y0 = 0, 1.0 # Condição inicial y(0)=1 para este problema
+    x_final = 4.0 # A figura vai até x=4
     h = 0.01
     
     methods = {
         'Euler': euler,
         'Heun': heun_nao_iterativo,
         'Nystrom': nystrom,
-        'Ralston': ralston,
-        'RK4': rk4
+        'Ralston': ralston
     }
 
-    print("\n--- 3.5) Gerando gráfico comparativo para y' = y - x ---")
-    plot_results(f, x0, y0, x_final, h, methods, y_exata=y_exata)
+    print("\n--- 3.5) Gerando gráfico de acordo com a FIGURA 25.11 ---")
+    plot_results(f, x0, y0, x_final, h, methods, y_exata=y_exata, title="Comparação de Métodos de EDO")
 
 ## 3.6) Reproduzir as Tabelas 33-1 e 33-2
 def problema_3_6():
@@ -181,104 +184,168 @@ def problema_3_7():
         'RK3': rk3,
         'RK4': rk4
     }
-    plot_results(f_33_1, 0, 2.0, x_final, h, methods_1, y_exata=y_exata_33_1)
+    plot_results(f_33_1, 0, 2.0, x_final, h, methods_1, y_exata=y_exata_33_1, title="Comparação de Métodos para Tábua 33-1")
     
     print("\n--- 3.7) Gerando gráfico comparativo para y' = y com RK3 e RK4 ---")
-    plot_results(f_33_2, 0, 1.0, x_final, h, methods_1, y_exata=y_exata_33_2)
+    methods_2 = {
+        'RK3': rk3,
+        'RK4': rk4
+    }
+    plot_results(f_33_2, 0, 1.0, x_final, h, methods_2, y_exata=y_exata_33_2, title="Comparação de Métodos para Tábua 33-2")
 
 ## 3.8) Resolver os problemas 25.1 a 25.6 (exemplos)
 def problema_3_8():
-    print("\n--- 3.8) Resolvendo problemas 25.1 a 25.6 (exemplos) ---")
+    """
+    Resolve os problemas de 25.1 a 25.6 do livro de métodos numéricos.
+    Apresenta os resultados em tabelas e gráficos.
+    """
+    print("\n--- 3.8) Resolvendo problemas 25.1 a 25.6 ---")
     
-    # Problema 25.1: dy/dx = 4x^3, y(0)=0. Solução Exata: y = x^4
+    # Problema 25.1: dy/dx = yx^2 - 1.1y, y(0)=1
+    # Solução Exata: y = exp(x^3/3 - 1.1x)
     def f_25_1(x, y):
-        return 4 * x**3
+        return y * x**2 - 1.1 * y
     def y_exata_25_1(x):
-        return x**4
+        return np.exp(x**3 / 3 - 1.1 * x)
 
-    x0, y0, h, x_final = 0, 0, 0.1, 1.0
-    print("\n--- Problema 25.1: y' = 4x^3, y(0)=0 ---")
-    print("--- Método de RK4 ---")
-    x_rk4, y_rk4 = rk4(f_25_1, x0, y0, h, x_final)
-    print_table(x_rk4, y_rk4, y_exata_25_1, h, "RK4")
-    plot_results(f_25_1, x0, y0, x_final, h, {'RK4': rk4}, y_exata=y_exata_25_1, title="Problema 25.1 com RK4")
+    x0, y0, x_final = 0, 1.0, 2.0
+    h = 0.1
+    print("\n--- Problema 25.1: y' = yx^2 - 1.1y, y(0)=1 ---")
     
-    # Problema 25.2: dy/dx = 5x^4, y(0)=0. Solução Exata: y = x^5
-    def f_25_2(x, y):
-        return 5 * x**4
-    def y_exata_25_2(x):
-        return x**5
+    # Gráfico do Problema 25.1
+    methods_25_1 = {
+        'Euler': euler,
+        'Heun': heun_nao_iterativo,
+        'Ponto Médio': ponto_medio,
+        'RK4': rk4,
+    }
+    plot_results(f_25_1, x0, y0, x_final, h, methods_25_1, y_exata=y_exata_25_1, title="Problema 25.1")
     
-    x0, y0, h, x_final = 0, 0, 0.1, 1.0
-    print("\n--- Problema 25.2: y' = 5x^4, y(0)=0 ---")
-    print("--- Método de RK4 ---")
-    x_rk4, y_rk4 = rk4(f_25_2, x0, y0, h, x_final)
-    print_table(x_rk4, y_rk4, y_exata_25_2, h, "RK4")
-    plot_results(f_25_2, x0, y0, x_final, h, {'RK4': rk4}, y_exata=y_exata_25_2, title="Problema 25.2 com RK4")
-
-    # Problema 25.3: y' = -y, y(0)=1. Solução Exata: y = e^-x
-    def f_25_3(x, y):
-        return -y
-    def y_exata_25_3(x):
-        return np.exp(-x)
-
-    x0, y0, h, x_final = 0, 1, 0.1, 1.0
-    print("\n--- Problema 25.3: y' = -y, y(0)=1 ---")
-    print("--- Métodos de RK4, Euler e Heun ---")
+    # Problema 25.2: Use o método de Euler com h=0.5 e 0.25 para resolver o Problema 25.1.
+    print("\n--- Problema 25.2: Comparação de h no Método de Euler para o Problema 25.1 ---")
+    h_values_25_2 = [0.5, 0.25]
+    
+    # Gráfico do Problema 25.2
+    methods_25_2 = {
+        'Euler h=0.5': lambda f, x0, y0, h_val, x_final: euler(f, x0, y0, 0.5, x_final),
+        'Euler h=0.25': lambda f, x0, y0, h_val, x_final: euler(f, x0, y0, 0.25, x_final)
+    }
+    plot_results(f_25_1, x0, y0, x_final, h_values_25_2[0], methods_25_2, y_exata=y_exata_25_1, title="Problema 25.2")
+    
+    # Problema 25.3: Use o método de Heun com h=0.5 para resolver o Problema 25.1.
+    print("\n--- Problema 25.3: Método de Heun com h=0.5 para o Problema 25.1 ---")
+    # Gráfico do Problema 25.3
     methods_25_3 = {
-        'RK4': rk4,
-        'Euler': euler,
-        'Heun': heun_nao_iterativo,
+        'Heun h=0.5': heun_nao_iterativo,
     }
-    plot_results(f_25_3, x0, y0, x_final, h, methods_25_3, y_exata=y_exata_25_3, title="Problema 25.3 com RK4, Euler e Heun")
+    plot_results(f_25_1, x0, y0, x_final, 0.5, methods_25_3, y_exata=y_exata_25_1, title="Problema 25.3")
     
-    # Problema 25.4: y' = -y + x + 2, y(0)=2. Solução Exata: y = e^-x + x + 1
-    def f_25_4(x, y):
-        return -y + x + 2
-    def y_exata_25_4(x):
-        return np.exp(-x) + x + 1
-
-    x0, y0, h, x_final = 0, 2, 0.1, 1.0
-    print("\n--- Problema 25.4: y' = -y + x + 2, y(0)=2 ---")
-    print("--- Métodos de RK4, Euler e Heun ---")
+    # Problema 25.4: Use o método do ponto médio com h=0.5 e 0.25 para resolver o Problema 25.1.
+    print("\n--- Problema 25.4: Método do Ponto Médio com h=0.5 e 0.25 para o Problema 25.1 ---")
+    h_values_25_4 = [0.5, 0.25]
+    
+    # Gráfico do Problema 25.4
     methods_25_4 = {
-        'RK4': rk4,
-        'Euler': euler,
-        'Heun': heun_nao_iterativo,
+        'Ponto Médio h=0.5': lambda f, x0, y0, h_val, x_final: ponto_medio(f, x0, y0, 0.5, x_final),
+        'Ponto Médio h=0.25': lambda f, x0, y0, h_val, x_final: ponto_medio(f, x0, y0, 0.25, x_final)
     }
-    plot_results(f_25_4, x0, y0, x_final, h, methods_25_4, y_exata=y_exata_25_4, title="Problema 25.4 com RK4, Euler e Heun")
-
-    # Problema 25.5: dy/dx = 2x, y(1)=1. Solução Exata: y = x^2
-    def f_25_5(x, y):
-        return 2 * x
-    def y_exata_25_5(x):
-        return x**2
+    plot_results(f_25_1, x0, y0, x_final, h_values_25_4[0], methods_25_4, y_exata=y_exata_25_1, title="Problema 25.4")
     
-    x0, y0, h, x_final = 1, 1, 0.1, 2.0
-    print("\n--- Problema 25.5: y' = 2x, y(1)=1 ---")
-    print("--- Métodos de RK4, Euler e Heun ---")
+    # Problema 25.5: Use o método RK4 com h=0.5 para resolver o Problema 25.1.
+    print("\n--- Problema 25.5: Método de RK4 com h=0.5 para o Problema 25.1 ---")
+    # Gráfico do Problema 25.5
     methods_25_5 = {
-        'RK4': rk4,
-        'Euler': euler,
-        'Heun': heun_nao_iterativo,
+        'RK4 h=0.5': rk4,
     }
-    plot_results(f_25_5, x0, y0, x_final, h, methods_25_5, y_exata=y_exata_25_5, title="Problema 25.5 com RK4, Euler e Heun")
+    plot_results(f_25_1, x0, y0, x_final, 0.5, methods_25_5, y_exata=y_exata_25_1, title="Problema 25.5")
 
-    # Problema 25.6: dy/dx = y^2+1, y(0)=0. Solução Exata: y = tan(x)
+    # Problema 25.6: Repita os problemas 25.1 a 25.5, mas para a nova EDO.
     def f_25_6(x, y):
-        return y**2 + 1
+        return (1 + 2*x) * np.sqrt(y)
     def y_exata_25_6(x):
-        return np.tan(x)
+        return (x**2 + x + 1)**2
+
+    x0, y0, x_final = 0, 1, 1.0
+    h = 0.01
+
+    print("\n--- Problema 25.6: Resolução dos problemas 25.1 a 25.5 para a nova EDO ---")
     
-    x0, y0, h, x_final = 0, 0, 0.1, 1.0
-    print("\n--- Problema 25.6: y' = y^2+1, y(0)=0 ---")
-    print("--- Métodos de RK4, Euler e Heun ---")
-    methods_25_6 = {
-        'RK4': rk4,
+    # Gráfico comparativo geral para o Problema 25.6
+    methods_25_6_plot = {
         'Euler': euler,
         'Heun': heun_nao_iterativo,
+        'Ponto Médio': ponto_medio,
+        'RK4': rk4,
     }
-    plot_results(f_25_6, x0, y0, x_final, h, methods_25_6, y_exata=y_exata_25_6, title="Problema 25.6 com RK4, Euler e Heun")
+    plot_results(f_25_6, x0, y0, x_final, h, methods_25_6_plot, y_exata=y_exata_25_6, title="Problema 25.6")
+
+# Funções de auxílio para plotagem
+def plot_results_adaptive(x_vals, y_vals, y_exata, title):
+    plt.figure(figsize=(12, 8))
+    x_true = np.linspace(min(x_vals), max(x_vals), 500)
+    y_true = y_exata(x_true)
+    plt.plot(x_true, y_true, 'k--', label='Solução Exata')
+    plt.plot(x_vals, y_vals, 'bo-', markersize=4, label='RKF45 (Adaptativo)')
+    plt.title(title)
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+# Definição do problema do Exemplo 25.12 (verifique o livro)
+def f_25_12(x, y):
+    return 4 * np.exp(0.8 * x) - 0.5 * y
+
+def y_exata_25_12(x):
+    return (4 / 1.3) * (np.exp(0.8 * x) - np.exp(-0.5 * x)) + 2 * np.exp(-0.5 * x)
+
+def desafio_3_9():
+    print("\n--- 3.9) [DESAFIO OPCIONAL] Reproduzindo o EXEMPLO 25.14 ---")
+    
+    # Parâmetros da simulação
+    x0 = 0.0
+    y0 = 2.0
+    h_inicial = 1.0
+    x_final = 1.0
+    tolerancia = 1e-5 # Tolerância padrão para o método adaptativo
+
+    x_rkf, y_rkf = rk_fehlberg(f_25_12, x0, y0, h_inicial, x_final, tol=tolerancia)
+
+    print(f"Resultados do Método RKF45 com tolerância = {tolerancia}:")
+    for i in range(len(x_rkf)):
+        erro_local = abs(y_rkf[i] - y_exata_25_12(x_rkf[i]))
+        print(f"x = {x_rkf[i]:.6f}, y = {y_rkf[i]:.6f}, Erro Absoluto = {erro_local:.6e}")
+    
+    plot_results_adaptive(x_rkf, y_rkf, y_exata_25_12, "Exemplo 25.14: Método Adaptativo RKF45")
+
+def desafio_3_10():
+    print("\n--- 3.10) [DESAFIO OPCIONAL] Resolvendo o problema 25.27 ---")
+
+    # Definir a função f(x) do problema 25.27
+    def f_25_27(x, y):
+        # Note que a função f(x) do problema 25.27 não depende de y
+        # O argumento y é mantido para compatibilidade com a função do método
+        term1 = 1 / ((x - 0.3)**2 + 0.01)
+        term2 = 1 / ((x - 0.9)**2 + 0.04)
+        return term1 + term2 - 6
+
+    # Parâmetros da simulação
+    x0 = 0.0
+    y0 = 0.0 # Valor inicial da integral
+    h_inicial = 0.1 # Passo inicial
+    x_final = 1.0
+    tolerancia = 1e-5
+
+    # Rodar o método RKF45
+    x_rkf, y_rkf = rk_fehlberg(f_25_27, x0, y0, h_inicial, x_final, tol=tolerancia)
+
+    valor_integral = y_rkf[-1]
+
+    print(f"O valor da integral de f(x) de 0 a 1 é: {valor_integral:.6f}")
+    
+    plot_results_adaptive(x_rkf, y_rkf, "Solução do Problema 25.27 (Método Adaptativo RKF45)")
+
 
 
 if __name__ == "__main__":
@@ -289,4 +356,5 @@ if __name__ == "__main__":
     # problema_3_5()
     # problema_3_6()
     # problema_3_7()
-    problema_3_8()
+    # problema_3_8()
+    desafio_3_9()
