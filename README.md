@@ -1,13 +1,9 @@
-## Métodos Numéricos 
+## Métodos Numéricos
 
-Repositório dedicado a disciplina de Métodos Numéricos da equipe: 
+Repositório dedicado à disciplina de Métodos Numéricos (UFPA), com as atividades da equipe:
 
-AMANDA GABRIELLY PRESTES LOPES - 202207040043 
-
-BIANCA CRISTINA DOS SANTOS BRITO - 202006840016 
-
-GILTON CONCEICAO CAMINHA - 202106840008 
-
-JOAO LORRAN GUIMARAES MENEZES - 201706840040 
-
-YASMIM CARVALHO DA SILVA - 202007040025
+- Amanda Gabrielly Prestes Lopes
+- Bianca Cristina dos Santos Brito
+- Gilton Conceicao Caminha
+- Joao Lorran Guimaraes Menezes
+- Yasmim Carvalho da Silva
